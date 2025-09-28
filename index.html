@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browser Persistence WebCheck</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .info-panel {
+            background-color: #e8f4fd;
+            border: 1px solid #bee5eb;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .counter-display {
+            font-size: 24px;
+            font-weight: bold;
+            color: #007bff;
+            text-align: center;
+            margin: 20px 0;
+        }
+        .button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
+        .cookie-info {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Browser Persistence WebCheck</h1>
+        <p>A simple webpage which mutates client state. Used for testing Session persistence.</p>
+        
+        <div class="info-panel">
+            <h3>Current Status</h3>
+            <div class="counter-display">
+                Counter: <span id="counterValue">0</span>
+            </div>
+            <div class="cookie-info">
+                <p><strong>Cookie Created:</strong> <span id="cookieCreated">Not set</span></p>
+                <p><strong>Last Updated:</strong> <span id="lastUpdated">Never</span></p>
+            </div>
+        </div>
+
+        <div style="text-align: center;">
+            <button class="button" onclick="incrementCounter()">Increment Counter</button>
+            <button class="button" onclick="resetCounter()">Reset Counter</button>
+        </div>
+    </div>
+
+    <script>
+        // Cookie utility functions
+        function setCookie(name, value, days = 365) {
+            const expires = new Date();
+            expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
+            document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/`;
+        }
+
+        function getCookie(name) {
+            const nameEQ = name + "=";
+            const ca = document.cookie.split(';');
+            for(let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+
+        // Initialize the application
+        function initializeApp() {
+            let counter = getCookie('counter');
+            let cookieCreated = getCookie('cookieCreated');
+            
+            // If this is the first visit, create the cookies
+            if (counter === null) {
+                counter = 0;
+                const now = new Date().toLocaleString();
+                setCookie('counter', counter);
+                setCookie('cookieCreated', now);
+                cookieCreated = now;
+                document.getElementById('cookieCreated').textContent = now;
+            } else {
+                counter = parseInt(counter);
+                document.getElementById('cookieCreated').textContent = cookieCreated || 'Unknown';
+            }
+
+            // Update the display
+            updateDisplay(counter);
+        }
+
+        function updateDisplay(counter) {
+            document.getElementById('counterValue').textContent = counter;
+            document.getElementById('lastUpdated').textContent = new Date().toLocaleString();
+        }
+
+        function incrementCounter() {
+            let counter = getCookie('counter');
+            counter = counter ? parseInt(counter) + 1 : 1;
+            
+            setCookie('counter', counter);
+            updateDisplay(counter);
+        }
+
+        function resetCounter() {
+            setCookie('counter', 0);
+            const now = new Date().toLocaleString();
+            setCookie('cookieCreated', now);
+            document.getElementById('cookieCreated').textContent = now;
+            updateDisplay(0);
+        }
+
+        // Initialize when the page loads
+        window.onload = initializeApp;
+    </script>
+</body>
+</html>
