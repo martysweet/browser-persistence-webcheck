@@ -15,7 +15,7 @@ This repository is especially valuable for testing browser persistence in:
 - **Automated testing**: Ensure your browser automation scripts properly handle session state
 - **Cross-browser compatibility**: Validate that different browser engines handle persistence consistently
 
-The tool creates persistent cookies on first visit and maintains a counter that increments with each button click, making it easy to verify that state is properly maintained across page reloads, browser restarts, or different automation scenarios.
+The tool creates persistent cookies on first visit and maintains a counter that automatically increments with each page load, making it easy to verify that state is properly maintained across page reloads, browser restarts, or different automation scenarios.
 
 ## Usage
 
@@ -49,16 +49,16 @@ The application is automatically deployed to GitHub Pages: [https://martysweet.g
 
 ### Testing Browser Persistence
 
-1. **Initial Visit**: When you first load the page, it will create cookies with the current timestamp and set the counter to 0.
+1. **Initial Visit**: When you first load the page, it will create cookies with the current timestamp and the counter will automatically increment to 1.
 
    ![Initial page load with counter at 0](https://github.com/user-attachments/assets/4c642e85-5b29-4a22-a101-5315cc4c3457)
 
-2. **Increment Counter**: Click the "Increment Counter" button to increase the counter value. Each click updates both the counter and the "Last Updated" timestamp.
+2. **Auto-increment on Page Load**: Each time you reload or refresh the page, the counter automatically increments by 1. You can also manually increment the counter using the "Increment Counter" button.
 
    ![After incrementing the counter](https://github.com/user-attachments/assets/1404a1ed-5826-432f-82f9-f6a77506afd3)
 
 3. **Test Persistence**: 
-   - Reload the page to verify the counter value persists
+   - Reload the page to verify the counter automatically increments and persists
    - Close and reopen the browser to test long-term cookie persistence
    - Use the "Reset Counter" button to reset the counter and update the creation timestamp
 
@@ -67,7 +67,8 @@ The application is automatically deployed to GitHub Pages: [https://martysweet.g
 The application tests the following browser persistence features:
 
 - **Cookie Creation**: Creates persistent cookies with a 1-year expiration
-- **State Persistence**: Maintains counter value across page reloads
+- **Auto-increment on Load**: Counter automatically increments by 1 each time the page loads
+- **State Persistence**: Maintains counter value across page reloads and browser sessions
 - **Timestamp Tracking**: Records when cookies were created and last updated
 - **Interactive Updates**: Real-time UI updates that reflect current state
 
