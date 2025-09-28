@@ -54,12 +54,25 @@
             font-size: 14px;
             color: #666;
         }
+        .auto-increment-note {
+            background-color: #d1ecf1;
+            border: 1px solid #bee5eb;
+            border-radius: 4px;
+            padding: 10px;
+            margin: 15px 0;
+            font-style: italic;
+            color: #0c5460;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Browser Persistence WebCheck</h1>
         <p>A simple webpage which mutates client state. Used for testing Session persistence.</p>
+        <div class="auto-increment-note">
+            <strong>🔄 Auto-increment:</strong> The counter automatically increments by 1 each time you load or refresh this page.
+        </div>
         
         <div class="info-panel">
             <h3>Current Status</h3>
@@ -104,14 +117,16 @@
             
             // If this is the first visit, create the cookies
             if (counter === null) {
-                counter = 0;
+                counter = 1; // Start at 1 for first visit auto-increment
                 const now = new Date().toLocaleString();
                 setCookie('counter', counter);
                 setCookie('cookieCreated', now);
                 cookieCreated = now;
                 document.getElementById('cookieCreated').textContent = now;
             } else {
-                counter = parseInt(counter);
+                // Auto-increment counter on each page load
+                counter = parseInt(counter) + 1;
+                setCookie('counter', counter);
                 document.getElementById('cookieCreated').textContent = cookieCreated || 'Unknown';
             }
 
